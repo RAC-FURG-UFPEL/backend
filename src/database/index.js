@@ -9,7 +9,7 @@ const dbpwd = encodeURIComponent(process.env.DB_PASS)
 const dburl = `mongodb://${dbuser}:${dbpwd}@${dbhost}`
 
 mongoose.connect(dburl, { useNewUrlParser: true }, function (err) { 
-    if (err) throw err; console.log('Successfully connected'); });
+    if (err) throw err; console.log('Successfully connected to Database!'); });
 
 mongoose.Promise = global.Promise
 
