@@ -5,28 +5,28 @@ const userSchema = new mongoose.Schema({
     speaker: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        require: true
+        required: true
     },
     admin: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        require: true
+        required: true
     },
     title: {
         type: String,
-        require: true
+        required: true
     },
     date: {
         type: Date,
-        require: true
+        required: true
     },
     description: {
         type: String,
-        require: true
+        required: true
     },
     confirm: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false
     },
 

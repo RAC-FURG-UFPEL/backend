@@ -6,35 +6,35 @@ const userSchema = new mongoose.Schema({
     // Required fields
     role: {
         type: Number,
-        require: true,
+        required: true,
         default: 001
     },
     firstName: {
         type: String,
-        require: true
+        required: true
     },
     lastName: {
         type: String,
-        require: true
+        required: true
     },
     email: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         lowercase: true
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         select: false
     },
     birthDate: {
         type: Date,
-        require: true
+        required: true
     },
     cpf: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
 
@@ -52,9 +52,6 @@ const userSchema = new mongoose.Schema({
     university: {
         type: String
     },
-
-    // Optional fields
-
     city: {
         type: String
     },
