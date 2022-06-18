@@ -52,7 +52,7 @@ router.post('/authenticate', async (req, res) => {
     }
         
     if(!await bcrypt.compare(password, user.password)){
-        return res.status(400).send({ error: 'Invalid password' })
+        return res.status(401).send({ error: 'Invalid password' })
     }
 
     user.password = undefined

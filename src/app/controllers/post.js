@@ -9,10 +9,10 @@ const Post = require('../models/Post')
 const authMiddleware = require('../middlewares/auth')
 
 // List
-router.get('/', async (req,res) => {
-    try{
+router.get('/', async (req, res) => {
+    try {
 
-        const posts = await Post.find().populate('author').sort({_id:-1})
+        const posts = await Post.find().populate('author').sort({ _id: -1 })
 
         return res.send({ posts })
 
@@ -24,11 +24,11 @@ router.get('/', async (req,res) => {
 
 // Create
 router.post('/', authMiddleware, async (req, res) => {
-    try{
+    try {
 
         const post = await Post.create({ ...req.body, author: req.userId })
 
-        return res.send( post )
+        return res.send(post)
 
     } catch (err) {
         console.log(err)
@@ -38,21 +38,30 @@ router.post('/', authMiddleware, async (req, res) => {
 })
 
 // Read
-router.get('/:postId', async (req, res) => {
-    try{
+router.get('/:postId/:quant?', async (req, res) => {
+    try {
 
-        const posts = await Post.findById(req.params.postId).populate('author')
+        if (req.params.postId === '*') {
 
-        return res.send({ posts })
+            const posts = await Post.find().populate('author').limit(req.params.quant)
 
+            return res.send({ posts })
+        } else {
+
+            const posts = await Post.findById(req.params.postId).populate('author')
+
+            return res.send({ posts })
+        }
     } catch (err) {
+
         return res.status(400).send({ error: 'Cannot find Post' })
+
     }
 })
 
 // Update
 router.put('/:postId', authMiddleware, async (req, res) => {
-    try{
+    try {
 
         const { domain, expirationDate, startDate, checkInterval, completed } = req.body
 
@@ -63,7 +72,7 @@ router.put('/:postId', authMiddleware, async (req, res) => {
 
         await Post.save()
 
-        return res.send( post )
+        return res.send(post)
 
     } catch (err) {
         return res.status(400).send({ error: 'Cannot find Post' })
@@ -72,7 +81,7 @@ router.put('/:postId', authMiddleware, async (req, res) => {
 
 // Delete
 router.delete('/:postId', authMiddleware, async (req, res) => {
-    try{
+    try {
 
         await Post.findByIdAndRemove(req.params.postId).populate('author')
 
