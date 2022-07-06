@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const mailer = require('../../modules/mailer')
 
+// DotEnv
+require('dotenv').config()
+
 // Require Models
 const User = require('../models/User')
 
@@ -26,7 +29,7 @@ router.post('/register', async (req, res) => {
     
     try {
         if (await User.findOne( { email } ))
-            return res.status(400).send({ error: 'User already exists!' })
+            return res.status(409).send({ error: 'User already exists!' })
 
         const user = await User.create(req.body)
 
@@ -36,8 +39,8 @@ router.post('/register', async (req, res) => {
             user,
             token: generateTokens({ id: user.id })
         })
-    } catch {
-        return res.status(400).send({ error: 'Registration failed' })
+    } catch (err) {
+        return res.status(500).send({ error: 'Registration failed' })
     }
 })
 
@@ -57,9 +60,32 @@ router.post('/authenticate', async (req, res) => {
 
     user.password = undefined
 
+    const accessToken = jwt.sign(
+        { id: user.id },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '15m' }
+    )
+
+    const refreshToken = jwt.sign(
+        { id: user.id },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: '1d' }
+    )
+
+    // const token = generateTokens({ id: user.id })
+
+    const roles = user.roles
+
+    const currentUser = await User.findByIdAndUpdate(user._id, {
+        refreshToken
+    }, { new: true })
+
+    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+
     res.send({
         user,
-        token: generateTokens({ id: user.id })
+        roles,
+        accessToken
     })
 })
 

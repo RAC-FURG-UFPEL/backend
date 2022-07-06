@@ -1,3 +1,5 @@
 20220618	16:51:12	4596bc33-32e1-4325-ab94-20da4ffab6fc	Error : Not allowed by CORS
 20220618	16:52:23	fd78f809-9b7e-4e12-ad39-bea8b1030f67	Error : Not allowed by CORS
 20220618	16:53:07	5fc74e24-a29e-4db8-802e-78c10d4a22aa	Error : Not allowed by CORS
+20220618	16:58:04	6256abb8-5e17-4e27-a56b-2fd02837e919	Error : Not allowed by CORS
+20220618	18:30:35	aff1db32-6ab5-4148-9839-ffd3f7f63f46	ReferenceError : id is not defined

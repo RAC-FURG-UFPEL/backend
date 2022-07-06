@@ -11,12 +11,19 @@ const fileupload = require('express-fileupload')
 // Custom Middlewares
 const { logger } = require('./app/middlewares/logEvents')
 const errorHandler = require('./app/middlewares/errorHandler')
+const cookieParser = require('cookie-parser')
 
 // Dotenv
 const PORT = process.env.PORT
 
 // Custom Middleware Logger
 app.use(logger)
+
+// Allow Credentials
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
+});
 
 // CORS - Cross Origin Resource Sharing
 const cors = require('cors')
@@ -28,7 +35,7 @@ const allowedList = [
 ]
 const corsOptions = {
     origin: (origin, callback) => {
-        if (allowedList.indexOf(origin) !== -1 ) {
+        if (allowedList.indexOf(origin) !== -1 || !origin) {
             callback(null, true)
         } else {
             callback(new Error('Not allowed by CORS'))
@@ -59,16 +66,24 @@ app.use(
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '/public')))
 
+// Cookies
+app.use(cookieParser())
+
 // Favicon
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 // Default Response
-app.get('/', (req,res) => {
-    res.send('Successfully connected')
+app.get('/', (req, res) => {
+    res.json({ message: 'Successfully connected' })
 })
 
-// Controllers
-require('./app/controllers/index')(app)
+// Routes
+require('./app/routes/index')(app)
+
+// 404
+app.all('*', (req, res) => {
+    res.status(404).json({ error: '404 Not found', message: 'Request not found. Please, check the documentation!' })
+})
 
 // Error Return
 app.use(errorHandler)
