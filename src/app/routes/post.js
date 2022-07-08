@@ -46,8 +46,14 @@ router.get('/:postId/:quant?', async (req, res) => {
             const posts = await Post.find().populate('author').sort({ _id: -1 }).limit(req.params.quant)
 
             return res.send({ posts })
-        } else {
+        } else if (req.params.postId === "title") {
+            
+            const posts = await Post.find( { url_title: req.params.quant } ).populate('author')
 
+            return res.send({ posts })
+
+        } else {
+            
             const posts = await Post.findById(req.params.postId).populate('author')
 
             return res.send({ posts })

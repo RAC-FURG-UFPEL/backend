@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    url_title: {
+        type: String,
+        require: true
+    },
     description: {
         type: String,
         require: true
